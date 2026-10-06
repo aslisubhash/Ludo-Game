@@ -1,0 +1,87 @@
+/* Design tokens — Ludo Universe
+   Deep midnight surfaces, warm whites, rich Ludo colours, restrained accents.
+   Festival events override the --event-* tokens at runtime (see js/content/events-calendar.js). */
+:root {
+  color-scheme: dark;
+
+  /* Surfaces */
+  --bg-0: #06070d;
+  --bg-1: #0b0e1c;
+  --bg-2: #111530;
+  --surface: #151a36;
+  --surface-2: #1c2246;
+  --surface-3: #252c58;
+  --glass: rgba(255, 255, 255, 0.06);
+  --glass-strong: rgba(255, 255, 255, 0.1);
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
+
+  /* Type */
+  --text: #f8f3ea;
+  --text-2: rgba(248, 243, 234, 0.7);
+  --text-3: rgba(248, 243, 234, 0.45);
+  --ink: #0b0e1c;
+
+  /* Ludo colours */
+  --red: #f0464b;
+  --red-d: #b8282e;
+  --green: #1fb574;
+  --green-d: #12804f;
+  --yellow: #ffc23d;
+  --yellow-d: #c88b0c;
+  --blue: #3c8dff;
+  --blue-d: #1f5fc4;
+
+  /* Accents */
+  --saffron: #ff7a2f;
+  --saffron-d: #c4501a;
+  --magenta: #ff3d7f;
+  --violet: #7b5cff;
+  --mint: #3ee6b0;
+  --online: #35e07a;
+  --danger: #ff4d5e;
+  --gold: #f4c776;
+  --gold-d: #b8893d;
+
+  /* Event theme (overridable) */
+  --event-a: #ff7a2f;
+  --event-b: #7b5cff;
+  --event-glow: rgba(255, 122, 47, 0.28);
+
+  /* Shape */
+  --r-xs: 8px;
+  --r-sm: 12px;
+  --r-md: 18px;
+  --r-lg: 24px;
+  --r-xl: 32px;
+  --r-pill: 999px;
+
+  /* Depth */
+  --shadow-1: 0 4px 14px rgba(0, 0, 0, 0.32);
+  --shadow-2: 0 10px 30px rgba(0, 0, 0, 0.45);
+  --shadow-3: 0 24px 60px rgba(0, 0, 0, 0.55);
+  --inner-hi: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --t-fast: 140ms;
+  --t-med: 260ms;
+  --t-slow: 480ms;
+
+  /* Type families */
+  --font-ui: "Outfit", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Unbounded", "Outfit", ui-sans-serif, system-ui, sans-serif;
+
+  /* Safe areas */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  --nav-h: 74px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --t-fast: 1ms; --t-med: 1ms; --t-slow: 1ms; }
+}
+:root[data-reduced-motion="1"] { --t-fast: 1ms; --t-med: 1ms; --t-slow: 1ms; }

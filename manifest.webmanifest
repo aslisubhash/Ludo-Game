@@ -1,0 +1,14 @@
+{
+  "name": "Ludo Universe",
+  "short_name": "Ludo Universe",
+  "description": "A premium, portrait-first social Ludo world.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "portrait",
+  "background_color": "#07080F",
+  "theme_color": "#07080F",
+  "icons": [
+    { "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

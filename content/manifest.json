@@ -1,0 +1,27 @@
+{
+  "version": 3,
+  "publishedAt": "2026-10-06",
+  "portraitsUrl": "content/portraits.json",
+  "characters": {
+    "count": 520,
+    "new": ["c500", "c501", "c502", "c503", "c504", "c505", "c506", "c507", "c508", "c509", "c510", "c511"]
+  },
+  "forceEvent": null,
+  "events": [],
+  "banners": [
+    { "tag": "NEW", "title": "20 NEW PLAYERS", "sub": "Fresh faces joined this week — find them in Discover", "art": "versus", "a": "#3EE6B0", "b": "#3C8DFF", "action": "play" },
+    { "tag": "COLLECTION", "title": "GALAXY DICE", "sub": "The rarest dice in the universe. Level 35 or the shop.", "art": "bolt", "a": "#7B5CFF", "b": "#FF3D7F", "action": "profile" }
+  ],
+  "catalog": {
+    "stickers": [
+      { "id": "chai-break", "text": "CHAI BREAK ☕", "bg": "#C68863", "fg": "#2a1206", "rot": -3 }
+    ]
+  },
+  "missions": [],
+  "activity": [],
+  "whatsNew": [
+    { "icon": "🪔", "title": "Navratri Nights is live", "body": "Win 5 matches to unlock the Festival Dice." },
+    { "icon": "👯‍♀️", "title": "20 new players", "body": "The universe grew to 520 characters." },
+    { "icon": "💬", "title": "Chai Break sticker", "body": "A new sticker for slow-thinking opponents." }
+  ]
+}
