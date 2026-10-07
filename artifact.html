@@ -1,0 +1,24 @@
+<title>Ludo Universe</title>
+<meta name="theme-color" content="#07080F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Unbounded:wght@600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/screens.css">
+<link rel="stylesheet" href="css/board.css">
+<link rel="stylesheet" href="css/overlays.css">
+<style>
+  /* Single dark look by design: the game is a night-time arcade world. */
+  :root { color-scheme: dark; }
+  html, body { height: 100%; background: #06070d; }
+</style>
+<div id="backdrop" aria-hidden="true"></div>
+<main id="stage" data-theme-event="none">
+  <div id="screen-host"></div>
+  <nav id="nav" class="hidden" aria-label="Main"></nav>
+  <div id="overlay-host"></div>
+  <div id="toast-host" aria-live="polite"></div>
+  <canvas id="fx-canvas" aria-hidden="true"></canvas>
+</main>
+<script type="module" src="js/main.js"></script>
