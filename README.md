@@ -41,7 +41,7 @@ python3 -m http.server 8765 & node tests/smoke.mjs shots   # headless Chromium: 
 
 Every character is a fictional game character. The cast is generated deterministically from a seed, with a name, personality, level, stats, bio, mood, favourite token colour and achievements. It scales to 10,000+ by raising `characters.count` in the manifest. Opponents are played locally by the personality-weighted AI.
 
-**Painted portraits** were generated with Higgsfield (`z_image`) and are listed in `content/portraits.json`, keyed by character index. Indexes 0–4 are the hero cast: Riya, Meera, Tanya, Ananya and Kavya. Characters without a portrait use the procedural SVG avatar, which is also the instant fallback if a portrait fails to load. To add more, append `{ index, url }` entries; the app picks them up via OTA with no release. The portrait URLs are hosted on Higgsfield's CDN. To self-host them, download the files into `assets/portraits/` and point the URLs there.
+**Photorealistic portraits** are generated with Higgsfield (`soul_2`; a few earlier painted `z_image` ones remain until replaced) and are listed in `content/portraits.json`, keyed by character index. Indexes 0–4 are the hero cast: Riya, Meera, Tanya, Ananya and Kavya. Characters without a portrait use the procedural SVG avatar, which is also the instant fallback if a portrait fails to load. To add more, append `{ index, url }` entries; the app picks them up via OTA with no release. The portrait URLs are hosted on Higgsfield's CDN. To self-host them, download the files into `assets/portraits/` and point the URLs there.
 
 ## Fair play
 

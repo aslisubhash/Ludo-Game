@@ -43,10 +43,10 @@ export function homeScreen() {
           <div class="ticker"><span class="ticker-text"></span></div>
 
           <div class="modes">
-            <button class="mode pressable" data-mode="2p"><span class="mode-ico">⚔️</span><b>2 PLAYER</b><small>Quick duel</small></button>
-            <button class="mode pressable" data-mode="4p"><span class="mode-ico">👑</span><b>4 PLAYER</b><small>Classic chaos</small></button>
-            <button class="mode pressable" data-mode="local"><span class="mode-ico">🤝</span><b>FRIENDS</b><small>Pass &amp; play</small></button>
-            <button class="mode pressable" data-mode="private"><span class="mode-ico">🔐</span><b>PRIVATE</b><small>Pick rivals</small></button>
+            <button class="mode pressable m-blue" data-mode="2p"><span class="mode-ico">⚔️</span><b>2 PLAYER</b><small>Quick duel</small></button>
+            <button class="mode pressable m-gold" data-mode="4p"><span class="mode-ico">👑</span><b>4 PLAYER</b><small>Classic chaos</small></button>
+            <button class="mode pressable m-green" data-mode="local"><span class="mode-ico">🤝</span><b>FRIENDS</b><small>Pass &amp; play</small></button>
+            <button class="mode pressable m-violet" data-mode="private"><span class="mode-ico">🔐</span><b>PRIVATE</b><small>Pick rivals</small></button>
           </div>
 
           <div class="section-head"><div class="eyebrow">Players online</div><button class="link" data-act="discover">See all</button></div>

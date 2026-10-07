@@ -51,66 +51,102 @@ export function posXY(color, pos, tokenIdx) {
 /* ---------- Board surface (SVG) ---------- */
 export function boardSvg(skinId) {
   const s = findItem('boards', skinId) || findItem('boards', 'classic-india');
-  const cellFill = s.cell;
+  const dark = Boolean(s.dark);
   const line = s.line;
+  const gold = s.gold || !dark ? '#E9C177' : '#F4C776';
   const out = [];
-  out.push(`<svg class="board-svg" viewBox="-0.35 -0.35 15.7 15.7" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">`);
+  out.push(`<svg class="board-svg" viewBox="-0.5 -0.5 16 16" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">`);
   out.push(`<defs>
-    ${Object.entries(COLOR_HEX).map(([k, v]) => `<linearGradient id="yd-${k}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${v}"/><stop offset="1" stop-color="${COLOR_DARK[k]}"/></linearGradient>`).join('')}
-    <radialGradient id="bd-light" cx="30%" cy="20%" r="90%"><stop offset="0" stop-color="#fff" stop-opacity="${s.dark ? 0.08 : 0.35}"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    ${Object.entries(COLOR_HEX).map(([k, v]) => `
+      <linearGradient id="yd-${k}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${shade(v, 0.1)}"/><stop offset=".55" stop-color="${v}"/><stop offset="1" stop-color="${COLOR_DARK[k]}"/></linearGradient>
+      <linearGradient id="hc-${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${shade(v, 0.14)}"/><stop offset="1" stop-color="${shade(v, -0.06)}"/></linearGradient>
+      <radialGradient id="hole-${k}" cx="50%" cy="38%" r="62%"><stop offset="0" stop-color="${shade(v, 0.35)}" stop-opacity=".25"/><stop offset=".7" stop-color="${v}" stop-opacity=".22"/><stop offset="1" stop-color="${COLOR_DARK[k]}" stop-opacity=".55"/></radialGradient>`).join('')}
+    <linearGradient id="cell" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${shade(s.cell, dark ? 0.05 : 0.02)}"/><stop offset="1" stop-color="${shade(s.cell, dark ? -0.04 : -0.06)}"/></linearGradient>
+    <linearGradient id="cell-sh" x1="0" y1="0" x2="0" y2="1"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="${dark ? 0.35 : 0.1}"/></linearGradient>
+    <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <linearGradient id="well-sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity="${dark ? 0.5 : 0.22}"/><stop offset=".18" stop-color="#000" stop-opacity="0"/></linearGradient>
+    <linearGradient id="frame" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${shade(s.frame, 0.16)}"/><stop offset=".5" stop-color="${s.frame}"/><stop offset="1" stop-color="${shade(s.frame, -0.1)}"/></linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF1C9"/><stop offset=".45" stop-color="${gold}"/><stop offset="1" stop-color="#9C6B22"/></linearGradient>
+    <radialGradient id="light" cx="25%" cy="12%" r="95%"><stop offset="0" stop-color="#fff" stop-opacity="${dark ? 0.1 : 0.28}"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="${dark ? 0.3 : 0.12}"/></radialGradient>
+    <filter id="drop" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="0.08" stdDeviation="0.09" flood-color="#000" flood-opacity=".35"/></filter>
     ${patternDefs(s)}
   </defs>`);
-  // Frame + surface
-  out.push(`<rect x="-0.35" y="-0.35" width="15.7" height="15.7" rx="0.75" fill="${s.frame}"/>`);
-  out.push(`<rect x="-0.1" y="-0.1" width="15.2" height="15.2" rx="0.55" fill="${s.surface}"/>`);
-  if (s.pattern !== 'none') out.push(`<rect x="-0.1" y="-0.1" width="15.2" height="15.2" rx="0.55" fill="url(#pat)" opacity="${s.dark ? 0.5 : 0.6}"/>`);
 
-  // Yards
+  // Frame: bevelled rim with an inner lip
+  out.push(`<rect x="-0.5" y="-0.5" width="16" height="16" rx="0.9" fill="url(#frame)"/>`);
+  out.push(`<rect x="-0.42" y="-0.42" width="15.84" height="15.84" rx="0.84" fill="none" stroke="#fff" stroke-opacity=".22" stroke-width="0.05"/>`);
+  out.push(`<rect x="-0.14" y="-0.14" width="15.28" height="15.28" rx="0.6" fill="#000" opacity=".35"/>`);
+  out.push(`<rect x="-0.08" y="-0.08" width="15.16" height="15.16" rx="0.55" fill="${s.surface}"/>`);
+  if (s.pattern !== 'none') out.push(`<rect x="-0.08" y="-0.08" width="15.16" height="15.16" rx="0.55" fill="url(#pat)" opacity="${dark ? 0.5 : 0.6}"/>`);
+
+  // Yards: coloured tile, recessed well, carved holes
   for (const [color, [x0, y0]] of Object.entries(YARD_ORIGIN)) {
-    out.push(`<rect x="${x0 + 0.12}" y="${y0 + 0.12}" width="5.76" height="5.76" rx="0.6" fill="url(#yd-${color})"/>`);
-    out.push(`<rect x="${x0 + 0.12}" y="${y0 + 0.12}" width="5.76" height="5.76" rx="0.6" fill="url(#pat-y)" opacity=".35"/>`);
-    out.push(`<rect x="${x0 + 0.85}" y="${y0 + 0.85}" width="4.3" height="4.3" rx="0.55" fill="${cellFill}" opacity="${s.dark ? 0.9 : 0.96}"/>`);
+    out.push(`<g filter="url(#drop)"><rect x="${x0 + 0.1}" y="${y0 + 0.1}" width="5.8" height="5.8" rx="0.62" fill="url(#yd-${color})"/></g>`);
+    out.push(`<rect x="${x0 + 0.1}" y="${y0 + 0.1}" width="5.8" height="5.8" rx="0.62" fill="url(#pat-y)" opacity=".3"/>`);
+    out.push(`<rect x="${x0 + 0.1}" y="${y0 + 0.1}" width="5.8" height="2.4" rx="0.62" fill="url(#gloss)" opacity=".5"/>`);
+    out.push(`<rect x="${x0 + 0.82}" y="${y0 + 0.82}" width="4.36" height="4.36" rx="0.6" fill="${dark ? shade(s.cell, 0.04) : '#FFFDF8'}"/>`);
+    out.push(`<rect x="${x0 + 0.82}" y="${y0 + 0.82}" width="4.36" height="4.36" rx="0.6" fill="url(#well-sh)"/>`);
+    out.push(`<rect x="${x0 + 0.82}" y="${y0 + 0.82}" width="4.36" height="4.36" rx="0.6" fill="none" stroke="${COLOR_DARK[color]}" stroke-opacity=".35" stroke-width="0.05"/>`);
     for (let i = 0; i < 4; i++) {
       const [x, y] = [x0 + 1.75 + (i % 2) * 2.5, y0 + 1.75 + Math.floor(i / 2) * 2.5];
-      out.push(`<circle cx="${x}" cy="${y}" r="0.78" fill="${COLOR_HEX[color]}" opacity=".18"/><circle cx="${x}" cy="${y}" r="0.78" fill="none" stroke="${COLOR_HEX[color]}" stroke-width="0.07" opacity=".7"/>`);
+      out.push(`<circle cx="${x}" cy="${y}" r="0.8" fill="url(#hole-${color})"/><circle cx="${x}" cy="${y}" r="0.8" fill="none" stroke="${COLOR_HEX[color]}" stroke-width="0.09"/><path d="M${x - 0.62},${y - 0.18} A0.66 0.66 0 0 1 ${x + 0.62},${y - 0.18}" fill="none" stroke="#000" stroke-opacity=".18" stroke-width="0.1"/>`);
     }
   }
 
-  // Track cells
-  const cell = (r, c, fill, extra = '') => `<rect x="${c + 0.05}" y="${r + 0.05}" width="0.9" height="0.9" rx="0.18" fill="${fill}" stroke="${line}" stroke-width="0.035" ${extra}/>`;
-  TRACK.forEach(([r, c]) => out.push(cell(r, c, cellFill)));
-  for (const [color, cells] of Object.entries(HOME_COL)) cells.forEach(([r, c], i) => out.push(cell(r, c, COLOR_HEX[color], `opacity="${0.78 + i * 0.04}"`)));
+  // Track cells (raised tiles)
+  const cell = (r, c, fill, extra = '') => `<rect x="${c + 0.04}" y="${r + 0.04}" width="0.92" height="0.92" rx="0.16" fill="${fill}" stroke="${line}" stroke-width="0.03" ${extra}/><rect x="${c + 0.04}" y="${r + 0.04}" width="0.92" height="0.92" rx="0.16" fill="url(#cell-sh)"/>`;
+  TRACK.forEach(([r, c]) => out.push(cell(r, c, 'url(#cell)')));
+  for (const [color, cells] of Object.entries(HOME_COL)) cells.forEach(([r, c]) => {
+    out.push(cell(r, c, `url(#hc-${color})`));
+    out.push(`<rect x="${c + 0.1}" y="${r + 0.08}" width="0.8" height="0.36" rx="0.12" fill="url(#gloss)"/>`);
+  });
   for (const color of Object.keys(START)) {
     const [r, c] = TRACK[START[color]];
-    out.push(cell(r, c, COLOR_HEX[color]));
-    out.push(arrow(c + 0.5, r + 0.5, color));
+    out.push(cell(r, c, `url(#hc-${color})`));
+    out.push(pawnIcon(c + 0.5, r + 0.52));
   }
-  STAR_CELLS.forEach((abs) => {
-    const [r, c] = TRACK[abs];
-    out.push(star(c + 0.5, r + 0.5, s.dark ? 'rgba(255,255,255,.55)' : 'rgba(21,26,54,.38)'));
-  });
+  // Entry arrows just before each home column
+  out.push(arrow(0.5, 7.5, 'red'), arrow(7.5, 0.5, 'green'), arrow(14.5, 7.5, 'yellow'), arrow(7.5, 14.5, 'blue'));
+  STAR_CELLS.forEach((abs) => { const [r, c] = TRACK[abs]; out.push(star(c + 0.5, r + 0.5, dark)); });
 
-  // Centre home
-  out.push(`<polygon points="6,6 7.5,7.5 6,9" fill="url(#yd-red)"/><polygon points="6,6 9,6 7.5,7.5" fill="url(#yd-green)"/><polygon points="9,6 9,9 7.5,7.5" fill="url(#yd-yellow)"/><polygon points="6,9 9,9 7.5,7.5" fill="url(#yd-blue)"/>`);
-  out.push(`<g class="board-emblem"><circle cx="7.5" cy="7.5" r="0.62" fill="${s.frame}" opacity=".9"/>${rosette(7.5, 7.5, 0.48, s.gold ? '#F4C776' : '#F8F3EA')}</g>`);
-  out.push(`<rect x="-0.1" y="-0.1" width="15.2" height="15.2" rx="0.55" fill="url(#bd-light)" pointer-events="none"/>`);
+  // Centre home with a raised gold medallion
+  out.push(`<g filter="url(#drop)">
+    <polygon points="6,6 7.5,7.5 6,9" fill="url(#yd-red)"/><polygon points="6,6 9,6 7.5,7.5" fill="url(#yd-green)"/>
+    <polygon points="9,6 9,9 7.5,7.5" fill="url(#yd-yellow)"/><polygon points="6,9 9,9 7.5,7.5" fill="url(#yd-blue)"/></g>`);
+  out.push(`<path d="M6,6 L9,9 M9,6 L6,9" stroke="#fff" stroke-opacity=".35" stroke-width="0.04"/>`);
+  out.push(`<g filter="url(#drop)"><circle cx="7.5" cy="7.5" r="0.82" fill="url(#gold)"/><circle cx="7.5" cy="7.5" r="0.66" fill="${s.frame}"/></g>`);
+  out.push(`<g class="board-emblem">${rosette(7.5, 7.5, 0.52, gold)}</g>`);
+
+  // Global lighting
+  out.push(`<rect x="-0.08" y="-0.08" width="15.16" height="15.16" rx="0.55" fill="url(#light)" pointer-events="none"/>`);
   out.push(`</svg>`);
   return out.join('');
 }
 
-function arrow(x, y, color) {
-  const rot = { red: 0, green: 90, yellow: 180, blue: 270 }[color];
-  return `<path d="M${x - 0.22},${y} L${x + 0.18},${y} M${x + 0.04},${y - 0.16} L${x + 0.2},${y} L${x + 0.04},${y + 0.16}" stroke="#fff" stroke-width="0.09" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="rotate(${rot} ${x} ${y})"/>`;
+function shade(hex, amt) {
+  if (!hex.startsWith('#')) return hex;
+  const n = parseInt(hex.slice(1), 16);
+  const c = (v) => Math.max(0, Math.min(255, Math.round(v + amt * 255)));
+  return `#${[(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v) => c(v).toString(16).padStart(2, '0')).join('')}`;
 }
 
-function star(x, y, fill) {
+function pawnIcon(x, y) {
+  return `<g fill="#fff" opacity=".92"><circle cx="${x}" cy="${y - 0.2}" r="0.13"/><path d="M${x - 0.13},${y - 0.06} L${x + 0.13},${y - 0.06} L${x + 0.2},${y + 0.18} L${x - 0.2},${y + 0.18}Z"/><rect x="${x - 0.27}" y="${y + 0.16}" width="0.54" height="0.1" rx="0.05"/></g>`;
+}
+
+function arrow(x, y, color) {
+  const rot = { red: 0, green: 90, yellow: 180, blue: 270 }[color];
+  return `<g transform="rotate(${rot} ${x} ${y})"><circle cx="${x}" cy="${y}" r="0.3" fill="${COLOR_HEX[color]}" opacity=".9"/><path d="M${x - 0.14},${y} L${x + 0.12},${y} M${x + 0.01},${y - 0.11} L${x + 0.13},${y} L${x + 0.01},${y + 0.11}" stroke="#fff" stroke-width="0.07" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+}
+
+function star(x, y, dark) {
   const pts = [];
   for (let i = 0; i < 10; i++) {
-    const r = i % 2 ? 0.14 : 0.33;
+    const r = i % 2 ? 0.13 : 0.31;
     const a = (i / 10) * Math.PI * 2 - Math.PI / 2;
     pts.push(`${(x + Math.cos(a) * r).toFixed(3)},${(y + Math.sin(a) * r).toFixed(3)}`);
   }
-  return `<polygon points="${pts.join(' ')}" fill="${fill}"/>`;
+  return `<circle cx="${x}" cy="${y}" r="0.38" fill="#F4C776" opacity="${dark ? 0.22 : 0.28}"/><polygon points="${pts.join(' ')}" fill="url(#gold)" stroke="#9C6B22" stroke-width="0.03" stroke-linejoin="round"/>`;
 }
 
 function rosette(x, y, r, col) {
@@ -143,6 +179,12 @@ function patternDefs(s) {
 }
 
 /* ---------- Board view (surface + pieces) ---------- */
+// Grid units (0..15) → % of the board element; the SVG viewBox adds a 0.5-unit frame on each side.
+const VB_PAD = 0.5;
+const toPct = (v) => ((v + VB_PAD) / (15 + VB_PAD * 2)) * 100;
+
+// Pawn: shadow · base disc · tapered body · collar · spherical head.
+export const PIECE_HTML = '<div class="piece-in"><i class="piece-shadow"></i><i class="piece-base"></i><i class="piece-body"></i><i class="piece-ring"></i><i class="piece-head"></i></div>';
 export class BoardView {
   constructor(root, { skin = 'classic-india', token = 'classic' } = {}) {
     this.root = root;
@@ -171,7 +213,7 @@ export class BoardView {
       el.className = `piece c-${p.color} shape-${this.tokenSkin.shape}`;
       el.dataset.p = pi;
       el.dataset.t = ti;
-      el.innerHTML = '<div class="piece-in"><i class="piece-shadow"></i><i class="piece-body"></i><i class="piece-ring"></i></div>';
+      el.innerHTML = PIECE_HTML;
       this.layer.appendChild(el);
       return el;
     }));
@@ -179,8 +221,8 @@ export class BoardView {
   }
 
   place(el, x, y, scale = 1) {
-    el.style.left = `${(x / 15) * 100}%`;
-    el.style.top = `${(y / 15) * 100}%`;
+    el.style.left = `${toPct(x)}%`;
+    el.style.top = `${toPct(y)}%`;
     el.style.setProperty('--sc', scale);
   }
 
@@ -279,8 +321,8 @@ export class BoardView {
   trail(x, y, color) {
     const d = document.createElement('i');
     d.className = 'trail';
-    d.style.left = `${(x / 15) * 100}%`;
-    d.style.top = `${(y / 15) * 100}%`;
+    d.style.left = `${toPct(x)}%`;
+    d.style.top = `${toPct(y)}%`;
     d.style.background = COLOR_HEX[color];
     this.fxLayer.appendChild(d);
     setTimeout(() => d.remove(), 500);

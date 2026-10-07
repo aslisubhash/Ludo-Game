@@ -26,10 +26,10 @@ export function playScreen(params = {}) {
         <div class="eyebrow">Choose your game</div>
         <button class="mode-big pressable" data-mode="2p"><div><b class="display">QUICK MATCH</b><small>1v1 · ~5 min · +250 coins</small></div><span class="mb-ico">⚔️</span></button>
         <div class="mode-grid">
-          <button class="mode pressable" data-mode="4p"><span class="mode-ico">👑</span><b>4 PLAYER</b><small>+400 coins</small></button>
-          <button class="mode pressable" data-mode="local"><span class="mode-ico">🤝</span><b>WITH FRIEND</b><small>Pass &amp; play</small></button>
-          <button class="mode pressable" data-mode="private"><span class="mode-ico">🔐</span><b>PRIVATE ROOM</b><small>Pick your rivals</small></button>
-          <button class="mode pressable" data-mode="rematch"><span class="mode-ico">🔁</span><b>RIVALS</b><small>Players you know</small></button>
+          <button class="mode pressable m-gold" data-mode="4p"><span class="mode-ico">👑</span><b>4 PLAYER</b><small>+400 coins</small></button>
+          <button class="mode pressable m-green" data-mode="local"><span class="mode-ico">🤝</span><b>WITH FRIEND</b><small>Pass &amp; play</small></button>
+          <button class="mode pressable m-violet" data-mode="private"><span class="mode-ico">🔐</span><b>PRIVATE ROOM</b><small>Pick your rivals</small></button>
+          <button class="mode pressable m-red" data-mode="rematch"><span class="mode-ico">🔁</span><b>RIVALS</b><small>Players you know</small></button>
         </div>
       </div>
       <div class="section-head" id="discover"><div class="h2">Discover players</div><span class="dim count-label"></span></div>

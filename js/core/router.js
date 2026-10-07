@@ -10,8 +10,8 @@ const history = [];
 
 export const TABS = [
   { name: 'home', label: 'HOME', icon: icon.home },
-  { name: 'play', label: 'PLAY', icon: icon.play, special: true },
   { name: 'chats', label: 'CHATS', icon: icon.chat },
+  { name: 'play', label: 'PLAY', icon: icon.play, special: true },
   { name: 'rewards', label: 'REWARDS', icon: icon.gift },
   { name: 'profile', label: 'PROFILE', icon: icon.user },
 ];

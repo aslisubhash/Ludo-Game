@@ -27,7 +27,7 @@ export function profileScreen(params = {}) {
   function preview(k, item) {
     if (k === 'dice') return `<div class="cp-dice" data-dice="${item.id}"></div>`;
     if (k === 'boards') return `<div class="cp-board">${boardSvg(item.id)}</div>`;
-    if (k === 'tokens') return `<div class="cp-tokens">${['red', 'green', 'yellow', 'blue'].map((c) => `<i class="piece static c-${c} shape-${item.shape}"><span class="piece-in"><i class="piece-shadow"></i><i class="piece-body"></i><i class="piece-ring"></i></span></i>`).join('')}</div>`;
+    if (k === 'tokens') return `<div class="cp-tokens">${['red', 'green', 'yellow', 'blue'].map((c) => `<i class="piece static c-${c} shape-${item.shape}"><span class="piece-in"><i class="piece-shadow"></i><i class="piece-base"></i><i class="piece-body"></i><i class="piece-ring"></i><i class="piece-head"></i></span></i>`).join('')}</div>`;
     if (k === 'frames') return `<div class="cp-frame"><div class="ava" style="--s:56px"><div class="ava-img emblem" style="background:linear-gradient(135deg,#232a55,#7B5CFF)"><span style="font-size:28px">🎲</span></div>${item.ring ? `<div class="frame">${frameSvg(item.id)}</div>` : ''}</div></div>`;
     if (k === 'stickers') return `<div class="cp-sticker"><span class="sticker" style="background:${item.bg};color:${item.fg};--rot:${item.rot}deg">${esc(item.text)}</span></div>`;
     return `<div class="cp-fx fx-${item.fx}">${item.fx === 'petals' ? '🌼' : item.fx === 'holi' ? '🎨' : item.fx === 'fireworks' ? '🎆' : '🎉'}</div>`;
